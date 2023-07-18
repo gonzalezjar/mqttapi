@@ -2,7 +2,7 @@ package com.demo.json;
 
 public class DeviceJson {
 	private Long id;
-	private String name;
+	private String device;
 	private String value;
 	public Long getId() {
 		return id;
@@ -10,11 +10,11 @@ public class DeviceJson {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getDevice() {
+		return device;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setDevice(String device) {
+		this.device = device;
 	}
 	public String getValue() {
 		return value;
@@ -22,8 +22,4 @@ public class DeviceJson {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
-	
-
-	
 }

@@ -1,6 +1,8 @@
 package com.demo;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +26,8 @@ import com.demo.services.DeviceService;
 @Configuration
 public class MqttBeans {
 
+	private static Logger log = LoggerFactory.getLogger(MqttBeans.class);
+	
 	@Value("${mqtt.topic.pub}")
 	private String topic_pub;
 
@@ -77,10 +81,18 @@ public class MqttBeans {
 			@Override
 			public void handleMessage(Message<?> message) throws MessagingException {
 				String topic = message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC).toString();
-				if (topic.equals(topic_sub)) {
+				//log.info("Topic: " + topic + " value: " + message.getPayload().toString());
+				if (topic.equals("esp8266/sensor/temperature")) {
 					try {
-//						System.out.println(message.getPayload());
-						devicesService.save("Sensor1", message.getPayload().toString());
+						//log.info(message.getPayload().toString());
+						devicesService.save("sensor_1", message.getPayload().toString());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}else if (topic.equals("esp8266/sensor/humidity")) {
+					try {
+						//log.info(message.getPayload().toString());
+						devicesService.save("sensor_2", message.getPayload().toString());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

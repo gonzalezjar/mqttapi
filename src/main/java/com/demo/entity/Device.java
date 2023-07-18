@@ -13,7 +13,7 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	private String name;
+	private String device;
     
 	private String value;
 
@@ -25,12 +25,12 @@ public class Device {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getDevice() {
+		return device;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDevice(String device) {
+		this.device = device;
 	}
 
 	public String getValue() {
