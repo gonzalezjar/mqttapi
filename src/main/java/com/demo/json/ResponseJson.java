@@ -2,26 +2,21 @@ package com.demo.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class DeviceJson {
+public class ResponseJson {
 	
-	@JsonProperty("id")
-	private Long id;
+	@JsonProperty("message")
+	private String message;
 	
-	@JsonProperty("device")
-	private String device;
-	
-	@JsonProperty("value")
-	private String value;
-
+	public ResponseJson(String message) {
+		this.message = message;
+	}
 }

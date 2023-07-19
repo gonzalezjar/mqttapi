@@ -1,5 +1,7 @@
 package com.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,39 +12,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.entity.Device;
+import com.demo.exeption.MqttApiException;
 import com.demo.json.DeviceJson;
+import com.demo.json.ResponseJson;
 import com.demo.services.DeviceService;
 
 @RestController
 @RequestMapping("/api/cmd")
 public class MqttController {
-
+	
+	private static Logger log = LoggerFactory.getLogger(MqttController.class);
+	
 	@Autowired
-	DeviceService deviceService;
+	private DeviceService deviceService;
 
 	@PostMapping()
-	public ResponseEntity<?> publish(@RequestBody DeviceJson deviceJson) {
+	public ResponseEntity<?> cmd(@RequestBody DeviceJson deviceJson) {
 		try {
-			deviceService.publishAndSave(deviceJson.getDevice(), deviceJson.getValue());
-			return ResponseEntity.ok("Success");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return ResponseEntity.ok("fail");
+			deviceService.publish(deviceJson.getDevice(), deviceJson.getValue());
+			return ResponseEntity.ok(new ResponseJson("Success"));
+		} catch (MqttApiException ex) {
+			log.info(ex.getMessage());
+			return ResponseEntity.ok(new ResponseJson(ex.getMessage()));
 		}
 	}
 
 	@GetMapping()
-	public ResponseEntity<?> read(@RequestParam("device") String deviceName) {
+	public ResponseEntity<?> cmd(@RequestParam("device") String deviceName) {
 		try {
 			Device device = deviceService.read(deviceName);
-			return ResponseEntity.ok(mapperJson(device));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return ResponseEntity.ok("fail");
+			return ResponseEntity.ok(mapperDeviceJson(device));
+		} catch (MqttApiException ex) {
+			log.info(ex.getMessage());
+			return ResponseEntity.ok(new ResponseJson(ex.getMessage()));
 		}
 	}
 
-	private DeviceJson mapperJson(Device device) {
+	private DeviceJson mapperDeviceJson(Device device) {
 		DeviceJson json = new DeviceJson();
 		json.setId(device.getId());
 		json.setDevice(device.getDevice());
@@ -50,4 +56,5 @@ public class MqttController {
 		return json;
 	}
 
+	
 }

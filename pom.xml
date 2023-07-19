@@ -16,6 +16,7 @@
 	<description>mqttDemo</description>
 	<properties>
 		<java.version>11</java.version>
+		<org.projectlombok.version>1.18.24</org.projectlombok.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,6 +55,13 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<!-- optional>true</optional -->
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
