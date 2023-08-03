@@ -37,7 +37,7 @@ public class MqttConfig {
 	public MqttClient mqttClient() throws MqttException {
 		MemoryPersistence persistence = new MemoryPersistence();
 		MqttConnectOptions connectionOptions = new MqttConnectOptions();
-		MqttClient mqttClient = new MqttClient(brokerUrl, clientId, persistence);
+		MqttClient mqttClient = new MqttClient(this.brokerUrl, this.clientId, persistence);
 		connectionOptions.setCleanSession(true);
 		connectionOptions.setPassword(this.password.toCharArray());
 		connectionOptions.setUserName(this.userName);
@@ -49,7 +49,7 @@ public class MqttConfig {
 	public MqttSubscriber mqttSubscriber(MqttClient mqttClient) throws MqttException {
 		MqttSubscriber mqttSubscriber = new MqttSubscriber();
 		mqttClient.setCallback(mqttSubscriber);
-		mqttClient.subscribe(topicSub, this.qos);
+		mqttClient.subscribe(this.topicSub, this.qos);
 		return mqttSubscriber;
 	}
 
