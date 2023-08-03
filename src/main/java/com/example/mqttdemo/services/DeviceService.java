@@ -22,7 +22,7 @@ public class DeviceService {
 	private static final String MSG_LOG_SAVE_DEVICE = "Device: %s save value %s";
 	
 	@Value("${mqtt.topicPub}")
-	private String topic_pub;
+	private String topicPub;
 
 	@Autowired
 	private DeviceRepository deviceRepository;
@@ -33,8 +33,7 @@ public class DeviceService {
 	public void publish(String deviceName, String value) throws MqttApiException {
 		Optional<Device> device = readDevice(deviceName);
 		if (device.isPresent()) {
-			mqttPublisher.publishMessage(topic_pub + deviceName, value);
-		//	mqtGateway.sendToMqtt(value, topic_pub + "/" + deviceName);
+			mqttPublisher.publishMessage(this.topicPub + deviceName, value);
 			device.get().setValue(value);
 			deviceRepository.save(device.get());
 			log.info(String.format(MSG_LOG_SAVE_DEVICE, device.get().getDevice() , device.get().getValue()));

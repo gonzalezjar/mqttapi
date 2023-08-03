@@ -3,7 +3,6 @@ package com.example.mqttdemo.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,21 +24,13 @@ public class MqttController {
 	
 	private static Logger log = LoggerFactory.getLogger(MqttController.class);
 	
-	@Value("${mqtt.topicPub}")
-	private String topicPub;
-	
-//	@Autowired
-//	private MqttPublisher mqttPublisher;
-	
 	@Autowired
 	private DeviceService deviceService;
 
 	@PostMapping()
 	public ResponseEntity<?> cmd(@RequestBody DeviceJson deviceJson) {
 		try {
-			
 			deviceService.publish(deviceJson.getDevice(), deviceJson.getValue());
-			//mqttPublisher.publishMessage(topicPub + deviceJson.getDevice(), deviceJson.getValue());
 			return ResponseEntity.ok(new ResponseJson("Success"));
 		} catch (MqttApiException ex) {
 			log.info(ex.getMessage());
@@ -65,6 +56,5 @@ public class MqttController {
 		json.setValue(device.getValue());
 		return json;
 	}
-
 	
 }

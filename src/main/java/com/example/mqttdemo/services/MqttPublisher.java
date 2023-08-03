@@ -24,7 +24,7 @@ public class MqttPublisher {
 	public void publishMessage(String topic, String message) throws MqttApiException {
 		try {
 			MqttMessage mqttmessage = new MqttMessage(message.getBytes());
-			mqttmessage.setQos(qos);
+			mqttmessage.setQos(this.qos);
 			mqttmessage.setRetained(false);
 			this.mqttClient.publish(topic, mqttmessage);
 			logger.info(String.format("Publish in topic: %s and message: %s", topic, message));
