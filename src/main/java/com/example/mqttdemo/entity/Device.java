@@ -1,4 +1,4 @@
-package com.demo.entity;
+package com.example.mqttdemo.entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

@@ -7,7 +7,7 @@ RUN mvn clean package -Pprod -DskipTests
 # Package stage
 #
 FROM openjdk:11-jdk-slim
-COPY --from=build /target/mqttDemo-0.0.1-SNAPSHOT.jar mqttDemo.jar
+COPY --from=build /target/mqtt-api-esp-0.0.1-SNAPSHOT.jar mqtt-api-esp.jar
 # ENV PORT=8080
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","mqttDemo.jar"]
+ENTRYPOINT ["java","-jar","mqtt-api-esp.jar"]

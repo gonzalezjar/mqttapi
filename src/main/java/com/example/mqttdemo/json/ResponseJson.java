@@ -1,4 +1,4 @@
-package com.demo.json;
+package com.example.mqttdemo.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,8 +1,9 @@
-package com.demo.controller;
+package com.example.mqttdemo.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.entity.Device;
-import com.demo.exeption.MqttApiException;
-import com.demo.json.DeviceJson;
-import com.demo.json.ResponseJson;
-import com.demo.services.DeviceService;
+import com.example.mqttdemo.entity.Device;
+import com.example.mqttdemo.exception.MqttApiException;
+import com.example.mqttdemo.json.DeviceJson;
+import com.example.mqttdemo.json.ResponseJson;
+import com.example.mqttdemo.services.DeviceService;
+
 
 @RestController
 @RequestMapping("/api/cmd")
@@ -23,13 +25,21 @@ public class MqttController {
 	
 	private static Logger log = LoggerFactory.getLogger(MqttController.class);
 	
+	@Value("${mqtt.topicPub}")
+	private String topicPub;
+	
+//	@Autowired
+//	private MqttPublisher mqttPublisher;
+	
 	@Autowired
 	private DeviceService deviceService;
 
 	@PostMapping()
 	public ResponseEntity<?> cmd(@RequestBody DeviceJson deviceJson) {
 		try {
+			
 			deviceService.publish(deviceJson.getDevice(), deviceJson.getValue());
+			//mqttPublisher.publishMessage(topicPub + deviceJson.getDevice(), deviceJson.getValue());
 			return ResponseEntity.ok(new ResponseJson("Success"));
 		} catch (MqttApiException ex) {
 			log.info(ex.getMessage());

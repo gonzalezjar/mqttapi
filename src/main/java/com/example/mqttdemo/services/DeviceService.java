@@ -1,18 +1,16 @@
-package com.demo.services;
+package com.example.mqttdemo.services;
 
 import java.util.Optional;
 
-import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.demo.MqttGateway;
-import com.demo.entity.Device;
-import com.demo.exeption.MqttApiException;
-import com.demo.repository.DeviceRepository;
+import com.example.mqttdemo.entity.Device;
+import com.example.mqttdemo.exception.MqttApiException;
+import com.example.mqttdemo.repository.DeviceRepository;
 
 @Service
 public class DeviceService {
@@ -23,19 +21,20 @@ public class DeviceService {
 	private static final String MSG_LOG_READ_DEVICE = "Device: %s read value %s";
 	private static final String MSG_LOG_SAVE_DEVICE = "Device: %s save value %s";
 	
-	@Value("${mqtt.topic.pub}")
+	@Value("${mqtt.topicPub}")
 	private String topic_pub;
 
 	@Autowired
 	private DeviceRepository deviceRepository;
 
 	@Autowired
-	private MqttGateway mqtGateway;
+	private MqttPublisher mqttPublisher;
 
 	public void publish(String deviceName, String value) throws MqttApiException {
 		Optional<Device> device = readDevice(deviceName);
 		if (device.isPresent()) {
-			mqtGateway.sendToMqtt(value, topic_pub + "/" + deviceName);
+			mqttPublisher.publishMessage(topic_pub + deviceName, value);
+		//	mqtGateway.sendToMqtt(value, topic_pub + "/" + deviceName);
 			device.get().setValue(value);
 			deviceRepository.save(device.get());
 			log.info(String.format(MSG_LOG_SAVE_DEVICE, device.get().getDevice() , device.get().getValue()));
